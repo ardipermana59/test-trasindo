@@ -9,13 +9,14 @@ import TableData from '@/Components/TableData.vue';
 import SearchInput from '@/Components/SearchInput.vue';
 
 import UpdateMenu from './UpdateMenu.vue';
+import InvoiceButton from './InvoiceButton.vue';
 
 const props = defineProps({
     data: Object,
     search: String
 });
 </script>
-<template>
+<template>a
     <AppLayout>
 
         <Head title="Daftar Order" />
@@ -90,6 +91,7 @@ const props = defineProps({
 
                             <td class="p-4 space-x-1 whitespace-nowrap flex">
                                 <UpdateMenu :order="order" />
+                                <InvoiceButton :id="order.id"/>
                             </td>
                         </tr>
                         <tr v-else class="border-b hover:bg-gray-100 dark:hover:bg-gray-700">

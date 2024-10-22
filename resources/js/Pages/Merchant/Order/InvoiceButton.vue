@@ -3,14 +3,13 @@ import WarningButton from '@/Components/Buttons/WarningButton.vue';
 import { defineProps } from 'vue';
 import axios from 'axios';
 
-
 const props = defineProps({
     id: Number,
 });
 
 const downloadInvoice = async (id) => {
     try {
-        const response = await axios.get(route('customer.orders.invoice', id), {
+        const response = await axios.get(route('merchant.orders.invoice', id), {
             responseType: 'blob' 
         });
 

@@ -32,14 +32,15 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session')])->group(fun
         Route::resource('menus', MerchantMenuController::class)->names('menus')->only(['index', 'store', 'destroy']);
         Route::post('menus/update', [MerchantMenuController::class, 'update'])->name('menus.update');
         Route::resource('orders', MerchantOrderController::class)->names('orders')->only(['index', 'update']);
+        Route::get('orders/invoice/{id}', [MerchantOrderController::class, 'invoice'])->name('orders.invoice');
     });
 
 
     Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('caterings', [CustomerCateringController::class, 'index'])->name('caterings.index');
         Route::post('caterings/order', [CustomerCateringController::class, 'order'])->name('caterings.order');
-        Route::get('caterings/invoice/{id}', [CustomerCateringController::class, 'invoice'])->name('caterings.invoice');
         Route::get('orders', [CustomerOrderController::class, 'index'])->name('orders.index');
+        Route::get('orders/invoice/{id}', [CustomerOrderController::class, 'invoice'])->name('orders.invoice');
     });
 });
 

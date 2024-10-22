@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Merchant;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -40,13 +41,9 @@ class MerchantOrderController extends Controller
 
     public function invoice(Request $request, $id)
     {
-        $customer = Customer::where('user_id', Auth::user()->id)->firstOrFail();
-
         $order = Order::with(['merchant','customer'])
-        ->where('customer_id', $customer->id)
         ->where('id', $id)
         ->first();
-  
 
         $html = view('invoices.catering', compact('order'))->render();
 
