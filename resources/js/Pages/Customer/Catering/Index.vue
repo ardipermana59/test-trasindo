@@ -10,7 +10,6 @@ import SearchInput from '@/Components/SearchInput.vue';
 
 import { formatCurrency } from '@/Utils/formatCurrency';
 import DetailCatering from './DetailCatering.vue';
-import InvoiceButton from './InvoiceButton.vue';
 
 const props = defineProps({
     data: Object,
@@ -85,7 +84,6 @@ const props = defineProps({
                             </td>
                             <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 <DetailCatering :data="menu"/>
-                                <InvoiceButton :id="menu.id"/>
                             </td>
                         </tr>
                         <tr v-else class="border-b hover:bg-gray-100 dark:hover:bg-gray-700">
