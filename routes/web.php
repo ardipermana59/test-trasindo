@@ -1,17 +1,16 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminCustomerController;
-use App\Http\Controllers\Admin\AdminMenuController;
-use App\Http\Controllers\Admin\AdminMenuTypeController;
-use App\Http\Controllers\Admin\AdminMerchantController;
 use App\Http\Controllers\Admin\AdminOrderController;
+use App\Http\Controllers\Admin\AdminMenuTypeController;
+use App\Http\Controllers\Admin\AdminMenuController;
+use App\Http\Controllers\Admin\AdminMerchantController;
 use App\Http\Controllers\Admin\AdminUserController;
-use App\Http\Controllers\Customer\CustomerCateringController;
 use App\Http\Controllers\Customer\CustomerOrderController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Merchant\MerchantMenuController;
+use App\Http\Controllers\Customer\CustomerCateringController;
 use App\Http\Controllers\Merchant\MerchantOrderController;
-use GuzzleHttp\Middleware;
+use App\Http\Controllers\Merchant\MerchantMenuController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', 'auth/login');
@@ -34,7 +33,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session')])->group(fun
         Route::resource('orders', MerchantOrderController::class)->names('orders')->only(['index', 'update']);
         Route::get('orders/invoice/{id}', [MerchantOrderController::class, 'invoice'])->name('orders.invoice');
     });
-
 
     Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('caterings', [CustomerCateringController::class, 'index'])->name('caterings.index');
