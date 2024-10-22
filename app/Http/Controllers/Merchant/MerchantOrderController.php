@@ -37,4 +37,20 @@ class MerchantOrderController extends Controller
 
         return redirect()->route('merchant.orders.index')->with('message', 'Order status berhasil diupdate');
     }
+
+    public function invoice(Request $request, $id)
+    {
+        $customer = Customer::where('user_id', Auth::user()->id)->firstOrFail();
+
+        $order = Order::with(['merchant','customer'])
+        ->where('customer_id', $customer->id)
+        ->where('id', $id)
+        ->first();
+  
+
+        $html = view('invoices.catering', compact('order'))->render();
+
+        $pdf = Pdf::loadHTML($html);
+        return $pdf->download('invoice-' . $order->id . '.pdf');
+    }
 }
