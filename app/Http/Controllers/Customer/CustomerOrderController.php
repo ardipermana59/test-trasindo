@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Models\Customer;
-use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Customer;
+use App\Models\Order;
 use Inertia\Inertia;
 
 class CustomerOrderController extends Controller
@@ -35,7 +35,6 @@ class CustomerOrderController extends Controller
         ]);
     }
 
-
     public function invoice(Request $request, $id)
     {
         $order = Order::with(['merchant', 'customer'])
@@ -45,6 +44,7 @@ class CustomerOrderController extends Controller
         $html = view('invoices.catering', compact('order'))->render();
 
         $pdf = Pdf::loadHTML($html);
+
         return $pdf->download('invoice-' . $order->id . '.pdf');
     }
 }

@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\InformationService;
-use Illuminate\Http\Request;
-use App\Models\Balances;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class DashboardController extends Controller

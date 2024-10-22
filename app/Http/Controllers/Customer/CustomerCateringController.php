@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\Menu;
 use App\Models\Order;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class CustomerCateringController extends Controller
@@ -54,7 +54,6 @@ class CustomerCateringController extends Controller
             'quantity' => $request->amount,
             'delivery_date' => $request->delivery_date,
         ]);
-
 
         return redirect()->route('customer.caterings.index')->with('message', 'Order baru berhasil dibuat!');
     }

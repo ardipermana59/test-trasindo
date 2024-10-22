@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Merchant;
 
-use App\Http\Controllers\Controller;
-use App\Models\Menu;
-use App\Models\MenuType;
-use App\Models\Merchant;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\MercharRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Models\MenuType;
 use Inertia\Inertia;
+use App\Models\Menu;
 
 class MerchantMenuController extends Controller
 {
-
     public function index(Request $request)
     {
         $search = $request->input('search', '');
@@ -28,6 +27,7 @@ class MerchantMenuController extends Controller
             ->paginate(15);
 
         $types = MenuType::orderBy('name')->get();
+
         return Inertia::render('Merchant/Menu/Index', [
             'data' => $data,
             'types' => $types,
@@ -35,16 +35,8 @@ class MerchantMenuController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(MercharRequest $request)
     {
-        $request->validate([
-            'type_id' => 'required|exists:menu_types,id',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'price' => 'required|numeric|min:0',
-        ]);
-
         $photoUrl = null;
 
         if ($request->hasFile('photo')) {
@@ -67,18 +59,8 @@ class MerchantMenuController extends Controller
         return redirect()->route('merchant.menus.index')->with('message', 'Data baru berhasil ditambahkan!');
     }
 
-
-
-    public function update(Request $request)
+    public function update(MercharRequest $request)
     {
-        $request->validate([
-            'type_id' => 'required|exists:menu_types,id',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Make photo optional
-            'price' => 'required|numeric|min:0',
-        ]);
-
         $menu = Menu::findOrFail($request->id);
 
         $oldPhotoUrl = $menu->photo_url; 
@@ -102,12 +84,9 @@ class MerchantMenuController extends Controller
             'price' => $request->price,
         ]);
    
-      
-    
         return redirect()->route('merchant.menus.index')->with('message', 'Data berhasil diperbarui!');
     }
     
-
     public function destroy(Menu $menu)
     {
         $menu->delete();

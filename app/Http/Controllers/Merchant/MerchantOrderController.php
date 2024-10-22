@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Merchant;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Order;
 use Inertia\Inertia;
 
 class MerchantOrderController extends Controller
@@ -32,6 +32,7 @@ class MerchantOrderController extends Controller
         ]);
 
         $order = Order::findOrFail($id);
+
         $order->update([
             'status' => $request->status,
         ]);
@@ -48,6 +49,7 @@ class MerchantOrderController extends Controller
         $html = view('invoices.catering', compact('order'))->render();
 
         $pdf = Pdf::loadHTML($html);
+        
         return $pdf->download('invoice-' . $order->id . '.pdf');
     }
 }
