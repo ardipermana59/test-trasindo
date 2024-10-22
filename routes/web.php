@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminMerchantController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Customer\CustomerCateringController;
+use App\Http\Controllers\Customer\CustomerOrderController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Merchant\MerchantMenuController;
 use App\Http\Controllers\Merchant\MerchantOrderController;
@@ -28,30 +29,17 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session')])->group(fun
     });
 
     Route::prefix('merchant')->middleware(['role:merchant'])->name('merchant.')->group(function () {
-        //     // Menu Management
         Route::resource('menus', MerchantMenuController::class)->names('menus')->only(['index', 'store', 'destroy']);
         Route::post('menus/update', [MerchantMenuController::class, 'update'])->name('menus.update');
         Route::resource('orders', MerchantOrderController::class)->names('orders')->only(['index', 'update']);
-
-        //     // Orders
-        //     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
     });
 
-    // // Rute untuk Portal Kantor (Customer)
-    Route::prefix('customer')->name('customer.')->group(function () {
 
-        //     // Catering Search
+    Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('caterings', [CustomerCateringController::class, 'index'])->name('caterings.index');
         Route::post('caterings/order', [CustomerCateringController::class, 'order'])->name('caterings.order');
-
-        //     Route::get('caterings/{id}', [CateringController::class, 'show'])->name('caterings.show');
-
-        //     // Purchase
-        //     Route::post('orders', [OrderController::class, 'store'])->name('orders.store');
-
-        //     // Invoices
-        //     Route::get('invoices', [OrderController::class, 'invoices'])->name('invoices.index');
-        //     Route::get('invoices/{id}', [OrderController::class, 'showInvoice'])->name('invoices.show');
+        Route::get('caterings/invoice/{id}', [CustomerCateringController::class, 'invoice'])->name('caterings.invoice');
+        Route::get('orders', [CustomerOrderController::class, 'index'])->name('orders.index');
     });
 });
 

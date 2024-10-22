@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Menu;
 use App\Models\Order;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -39,10 +40,10 @@ class CustomerCateringController extends Controller
     public function order(Request $request)
     {
         $request->validate([
-            'merchant_id' => 'required|exists:merchants,id', 
-            'id' => 'required|exists:menus,id',              
-            'amount' => 'required|integer|min:1',           
-            'delivery_date' => 'required|date|after_or_equal:today', 
+            'merchant_id' => 'required|exists:merchants,id',
+            'id' => 'required|exists:menus,id',
+            'amount' => 'required|integer|min:1',
+            'delivery_date' => 'required|date|after_or_equal:today',
         ]);
 
         $customer = Customer::where('user_id', Auth::user()->id)->first();
@@ -57,5 +58,21 @@ class CustomerCateringController extends Controller
 
 
         return redirect()->route('customer.caterings.index')->with('message', 'Order baru berhasil dibuat!');
+    }
+
+    public function invoice(Request $request, $id)
+    {
+        $customer = Customer::where('user_id', Auth::user()->id)->firstOrFail();
+
+        $order = Order::with(['merchant','customer'])
+        ->where('customer_id', $customer->id)
+        ->where('id', $id)
+        ->first();
+  
+
+        $html = view('invoices.catering', compact('order'))->render();
+
+        $pdf = Pdf::loadHTML($html);
+        return $pdf->download('invoice-' . $order->id . '.pdf');
     }
 }
